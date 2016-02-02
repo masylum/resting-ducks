@@ -49,7 +49,7 @@ const tasks = Duck(client, {
 const store = createStore(tasks.reducer)
 ```
 
-### API
+### `Api`
 
 Defines how you interact with your server.
 Must implement `fetch`, `post`, `put`, and `del`.
