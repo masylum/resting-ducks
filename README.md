@@ -28,9 +28,9 @@ store.dispatch(
 
 ## API
 
-### Constructor
+### `Duck`
 
-The `Duck` constructor accepts two arguments:
+The constructor accepts two arguments:
 
   - `client` an API to interact with your server. You can use
   the one provided by default in `resting-ducks` wich uses [fetch-please](https://github.com/albburtsev/fetch-please)
@@ -38,6 +38,16 @@ The `Duck` constructor accepts two arguments:
   - `options`
     - `indexes` An array of attributes you would like your model indexed by.
     Defaults to `['id']`
+
+```js
+import { Duck, Api} from 'resting-ducks'
+
+const client = new Api({host: 'http://localhost:8000', resource: 'tasks'})
+const tasks = Duck(client, {
+  indexes: ['id', 'project_id']
+})('myTasks')
+const store = createStore(tasks.reducer)
+```
 
 ### API
 
@@ -50,22 +60,40 @@ Options:
   - `resource` Mandatory. The name of your resource
   - `base` Defaults to `/`. The prefix (for instance versioning) of your API
 
-### Actions
+```js
+import { Api } from 'resting-ducks'
+
+const client = new Api({
+  host: 'http://localhost:3000',
+  resource: 'users',
+  base: '/v2'
+})
+
+client.fetch().then((data) => {
+  console.log(data)
+})
+```
+
+### Duck API
 
 **Resting ducks** come with all the common REST actions so you don't
 have to re-implement them over and over in your stores.
 
-  - **set** `duck.set(resources, id|cid = null)`
+##### `reducer(state, action)`
+
+The reducer for your resource. Add this one to your store and you are all set!
+
+##### `set(resources, id|cid = null)`
 
 Replace the current resources with the given ones.
 
 If a id/cid is given, it applies only to the given resource
 
-  - **patch** `duck.patch(resources, id|cid)`
+##### `patch(resources, id|cid)`
 
 Patch the  resource with the given attributes.
 
-  - **request** `duck.request(xhr, id|cid = null)`
+##### `request(xhr, id|cid = null)`
 
 Marks the current duck as having an
 ongoing cancelable request. You can use this to represent a loading
@@ -73,35 +101,35 @@ transaction and cancel it if needed.
 
 If a id/cid is given, it applies only to the given resource
 
-  - **error** `duck.error(xhr, id|cid = null)`
+##### `error(xhr, id|cid = null)`
 
 Marks the current duck as having an
 error. You can use this to represent it.
 
 If a id/cid is given, it applies only to the given resource.
 
-  - **add** `duck.add(attributes)`
+##### `add(attributes)`
 
 Append a new resource on the duck.
 
-  - **remove** `duck.remove(id|cid)`
+##### `remove(id|cid)`
 
 Remove a new resource on the duck.
 
-  - **fetch** `duck.fetch()`
+##### `fetch()`
 
 Retrieve your models from your server.
 It sets a *request* object so you can track progress and cancel
 it if needed.
 
-  - **create** `duck.create(attributes, options)`
+##### `create(attributes, options)`
 
 Send a new resource to your server. The new resource
 is optimistically added on the client.
 It sets a *request* object so you can track progress and cancel
 it if needed.
 
-  - **update** `duck.udpate(attributes, id, options)`
+##### `udpate(attributes, id, options)`
 
 Send new attributes for your resource to your server.
 The new attributes are optimistically set on the client.
@@ -115,7 +143,7 @@ Extra options:
 
 `TODO` Add support for `PATCH`
 
-  - **destroy** `duck.destroy(id, options)`
+##### `destroy(id, options)`
 
 Destroy a resource on your server. The resource is optimistically
 removed on the client.
