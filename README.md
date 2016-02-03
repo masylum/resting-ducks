@@ -69,44 +69,55 @@ const client = new Api({
   base: '/v2'
 })
 
-client.fetch().then((data) => {
+const {xhr, promise} = client.fetch()
+
+promise.then((data) => {
   console.log(data)
 })
+
+// Timeout of 500ms
+setTimeout(() => {
+  xhr.abort()
+}, 500)
 ```
 
 ### Duck API
 
-**Resting ducks** come with all the common REST actions so you don't
+**Resting ducks** come with all the common *REST* actions so you don't
 have to re-implement them over and over in your stores.
+
+#### Reducer
 
 ##### `reducer(state, action)`
 
 The reducer for your resource. Add this one to your store and you are all set!
 
+#### Actions creators
+
 ##### `set(resources, id|cid = null)`
 
 Replace the current resources with the given ones.
 
-If a id/cid is given, it applies only to the given resource
+If a `id`/`cid` is given, it applies only to the given resource
 
-##### `patch(resources, id|cid)`
+##### `patch(attributes, id|cid)`
 
-Patch the  resource with the given attributes.
+Patch the resource with the given attributes.
 
-##### `request(xhr, id|cid = null)`
+##### `request({label, xhr}, id|cid = null)`
 
 Marks the current duck as having an
 ongoing cancelable request. You can use this to represent a loading
 transaction and cancel it if needed.
 
-If a id/cid is given, it applies only to the given resource
+If a `id`/`cid` is given, it applies only to the given resource
 
-##### `error(xhr, id|cid = null)`
+##### `error({label, error}, id|cid = null)`
 
 Marks the current duck as having an
 error. You can use this to represent it.
 
-If a id/cid is given, it applies only to the given resource.
+If a `id`/`cid` is given, it applies only to the given resource.
 
 ##### `add(attributes)`
 
@@ -114,27 +125,38 @@ Append a new resource on the duck.
 
 ##### `remove(id|cid)`
 
-Remove a new resource on the duck.
+Remove a resource.
+
+#### Async Actions creators
 
 ##### `fetch()`
 
 Retrieve your models from your server.
-It sets a *request* object so you can track progress and cancel
+
+It marks the `request` object so you can track progress and cancel
 it if needed.
+
+In case of error it marks the `error` object.
 
 ##### `create(attributes, options)`
 
 Send a new resource to your server. The new resource
 is optimistically added on the client.
-It sets a *request* object so you can track progress and cancel
+
+It marks the `request` object so you can track progress and cancel
 it if needed.
+
+In case of error it marks the `error` object.
 
 ##### `udpate(attributes, id, options)`
 
 Send new attributes for your resource to your server.
 The new attributes are optimistically set on the client.
-It sets a *request* object so you can track progress and cancel
+
+It marks the `request` object so you can track progress and cancel
 it if needed.
+
+In case of error it marks the `error` object.
 
 Extra options:
 
@@ -147,13 +169,16 @@ Extra options:
 
 Destroy a resource on your server. The resource is optimistically
 removed on the client.
-It sets a *request* object so you can track progress and cancel
+
+It marks the `request` object so you can track progress and cancel
 it if needed.
+
+In case of error it marks the `error` object.
 
 ### Options
 
 `create`, `update` and `destroy` are optimistic by default. You can
-disable that behaviour passing the `optimistic` flag to false.
+disable that behaviour passing the `optimistic` flag to `false`.
 
 ## Tree schema
 
@@ -161,27 +186,27 @@ Your tree will have the following schema:
 
 ```js
 resources: [
-  {
-    cid: String,
-    request: {
-      label: String,
-      request: Object,
+  {                    // Information at the resource level
+    cid: String,       // Client side id. Used for optimistic updates
+    request: {         // An ongoing request
+      label: String,   // Examples: 'updating', 'creating', 'fetching', 'destroying' ...
+      xhr: Object,     // The xhr object. You can abort it with `xhr.abort()`
     },
-    error: {
-      label: String,
-      error: Object,
+    error: {           // A failed request
+      label: String,   // Examples: 'updating', 'creating', 'fetching', 'destroying' ...
+      error: String,   // A string representing the error
     },
-    attributes: Object
+    attributes: Object // The resource attributes
   }
-]
-cid: String,
-request: {
-  label: String,
-  request: Object,
+]                      // Information at the collection level
+cid: String,           // The latest Client id generated
+request: {             // An ongoing request
+  label: String,       // Examples: 'updating', 'creating', 'fetching', 'destroying' ...
+  xhr: Object,         // The xhr object. You can abort it with `xhr.abort()`
 },
-error: {
-  label: String,
-  error: Object,
+error: {               // A failed request
+  label: String,       // Examples: 'updating', 'creating', 'fetching', 'destroying' ...
+  error: Object,       // A string representing the error
 }
 ```
 
