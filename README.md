@@ -2,7 +2,7 @@
 
 REST conventions for single tree stores.
 
-![](https://travis-ci.org/masylum/resting-ducks.svg)
+[![Build Status](https://travis-ci.org/masylum/resting-ducks.svg?branch=master)](https://travis-ci.org/masylum/resting-ducks)
 
 ![](https://media.giphy.com/media/b9QBHfcNpvqDK/giphy.gif)
 
