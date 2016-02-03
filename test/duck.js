@@ -1,6 +1,6 @@
 /* globals describe, beforeEach, it, context */
 import assert from 'assert'
-import Duck from '../src/duck'
+import { Duck } from '../src/'
 import MockApi from './mocks/api'
 
 const error = 'boom!'
