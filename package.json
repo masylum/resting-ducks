@@ -1,7 +1,7 @@
 {
   "name": "resting-ducks",
   "version": "0.0.1",
-  "description": "Bring REST API conventions to redux",
+  "description": "REST conventions for single tree stores.",
   "repository": "",
   "dependencies": {
     "fetch-please": "^0.1.0",
@@ -16,7 +16,8 @@
   "main": "lib",
   "scripts": {
     "compile": "./node_modules/.bin/babel src --out-dir lib",
-    "test": "npm run compile && ./node_modules/mocha/bin/mocha test/* --compilers js:babel-register --watch",
+    "test": "npm run compile && ./node_modules/mocha/bin/mocha test/* --compilers js:babel-register",
+    "watch": "npm run compile && ./node_modules/mocha/bin/mocha test/* --compilers js:babel-register --watch",
     "prepublish": "npm run compile"
   }
 }
