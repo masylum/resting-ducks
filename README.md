@@ -81,18 +81,18 @@ setTimeout(() => {
 }, 500)
 ```
 
-### Duck API
+### `Duck API`
 
 **Resting ducks** come with all the common *REST* actions so you don't
 have to re-implement them over and over in your stores.
 
-#### Reducer
+### Reducer
 
 ##### `reducer(state, action)`
 
 The reducer for your resource. Add this one to your store and you are all set!
 
-#### Actions creators
+### Actions creators
 
 ##### `set(resources, id|cid = null)`
 
@@ -126,8 +126,6 @@ Append a new resource on the duck.
 ##### `remove(id|cid)`
 
 Remove a resource.
-
-#### Async Actions creators
 
 ##### `fetch()`
 
