@@ -42,10 +42,10 @@ describe('Duck', () => {
 
   const dispatch = (action) => {
     if (typeof action === 'function') {
-      return action(dispatch, () => state)
+      return action(dispatch, () => ({active_tasks: state}))
     } else {
       state = duck.reducer(state, action)
-      return state
+      return action
     }
   }
 
@@ -67,7 +67,8 @@ describe('Duck', () => {
             error: null
           }
 
-          assert.deepEqual(dispatch(duck.set(attributes, 10)), {
+          dispatch(duck.set(attributes, 10))
+          assert.deepEqual(state, {
             resources: [resource],
             indexes: {id: {11: [resource]}},
             request: null,
@@ -88,7 +89,8 @@ describe('Duck', () => {
           error: null
         }
 
-        assert.deepEqual(dispatch(duck.set([attributes])), {
+        dispatch(duck.set([attributes]))
+        assert.deepEqual(state, {
           resources: [resource],
           indexes: {id: {15: [resource]}},
           cid: 'c1',
@@ -116,7 +118,8 @@ describe('Duck', () => {
           error: null
         }
 
-        assert.deepEqual(dispatch(duck.patch(attributes, 10)), {
+        dispatch(duck.patch(attributes, 10))
+        assert.deepEqual(state, {
           resources: [resource],
           indexes: {id: {11: [resource]}},
           request: null,
@@ -145,7 +148,8 @@ describe('Duck', () => {
             attributes: {a: 'b', id: 10}
           }
 
-          assert.deepEqual(dispatch(duck.request(request, 10)), {
+          dispatch(duck.request(request, 10))
+          assert.deepEqual(state, {
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
@@ -166,7 +170,8 @@ describe('Duck', () => {
           error: null
         }
 
-        assert.deepEqual(dispatch(duck.request(request)), {
+        dispatch(duck.request(request))
+        assert.deepEqual(state, {
           resources: [resource],
           indexes: {id: {10: [resource]}},
           request,
@@ -195,7 +200,8 @@ describe('Duck', () => {
             attributes: {a: 'b', id: 10}
           }
 
-          assert.deepEqual(dispatch(duck.error(error, 10)), {
+          dispatch(duck.error(error, 10))
+          assert.deepEqual(state, {
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
@@ -216,7 +222,8 @@ describe('Duck', () => {
           error: null
         }
 
-        assert.deepEqual(dispatch(duck.error(error)), {
+        dispatch(duck.error(error))
+        assert.deepEqual(state, {
           resources: [resource],
           indexes: {id: {10: [resource]}},
           error,
@@ -236,7 +243,8 @@ describe('Duck', () => {
 
     context('when the resource is found', () => {
       it('updates the resource', () => {
-        assert.deepEqual(dispatch(duck.remove(10)), {
+        dispatch(duck.remove(10))
+        assert.deepEqual(state, {
           resources: [],
           indexes: {id: {}},
           request: null,
@@ -263,7 +271,8 @@ describe('Duck', () => {
         error: null
       }
 
-      assert.deepEqual(dispatch(duck.add(attributes)), {
+      dispatch(duck.add(attributes))
+      assert.deepEqual(state, {
         resources: [resourceA, resourceB],
         indexes: {id: {10: [resourceA], 11: [resourceB]}},
         request: null,
@@ -348,7 +357,7 @@ describe('Duck', () => {
           request: null,
           error: null
         }
-        const attributes = {b: 'c', id: 11}
+        const attributes = {b: 'c'}
         const resourceB = {
           attributes,
           cid: 'c2',
@@ -360,7 +369,7 @@ describe('Duck', () => {
 
         assert.deepEqual(state, {
           resources: [resourceA, resourceB],
-          indexes: {id: {10: [resourceA], 11: [resourceB]}},
+          indexes: {id: {10: [resourceA]}},
           request: null,
           error: null,
           cid: 'c2'
@@ -380,13 +389,13 @@ describe('Duck', () => {
             error: null
           }
           const resourceB = {
-            attributes,
+            attributes: {c: 'd',id: 11},
             cid: 'c2',
             request: null,
             error: null
           }
 
-          return dispatch(duck.create({b: 'c', id: 11})).then(() => {
+          return dispatch(duck.create({b: 'c'})).then(() => {
             assert.deepEqual(state, {
               resources: [resourceA, resourceB],
               indexes: {id: {10: [resourceA], 11: [resourceB]}},
@@ -409,7 +418,7 @@ describe('Duck', () => {
             error: null
           }
 
-          return dispatch(duck.create({b: 'c', id: 11})).then(() => {
+          return dispatch(duck.create({b: 'c'})).then(() => {
             assert.deepEqual(state, {
               resources: [resourceA],
               indexes: {id: {10: [resourceA]}},

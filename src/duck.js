@@ -106,13 +106,14 @@ export default (client, options = {}) => namespace => {
      * @option {Boolean} optimistic
      */
     create (attributes, {optimistic = true} = {}) {
-      return (dispatch, _getState) => {
+      return (dispatch, getState) => {
         let cid
         const label = 'creating'
         const { xhr, promise } = client.post('', attributes)
 
         if (optimistic) {
-          cid = dispatch(this.add(attributes)).cid
+          dispatch(this.add(attributes))
+          cid = getState()[namespace].cid
 
           dispatch(this.request({label, xhr}, cid))
         }
@@ -151,7 +152,7 @@ export default (client, options = {}) => namespace => {
         patch = false
       } = {}
     ) {
-      return (dispatch, getState) => {
+      return (dispatch, _getState) => {
         const label = 'updating'
         const { xhr, promise } = client.put(`/${id}`, attributes)
 

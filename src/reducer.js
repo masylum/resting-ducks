@@ -45,6 +45,7 @@ class Reducer {
       for (const index of this.indexes) {
         const attr = resource.attributes[index]
 
+        if (!attr) break
         indexes[index][attr] = indexes[index][attr] || []
         indexes[index][attr].push(resource)
       }
