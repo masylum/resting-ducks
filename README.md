@@ -2,6 +2,8 @@
 
 REST conventions for single tree stores.
 
+![](https://travis-ci.org/masylum/resting-ducks.svg)
+
 ![](https://media.giphy.com/media/b9QBHfcNpvqDK/giphy.gif)
 
 ## Installation
