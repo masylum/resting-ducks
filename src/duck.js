@@ -79,10 +79,10 @@ export default (client, options = {}) => namespace => {
 
     // Server Sync
 
-    fetch () {
+    fetch (params) {
       return (dispatch, _getState) => {
         const label = 'fetching'
-        const { xhr, promise } = client.fetch('')
+        const { xhr, promise } = client.fetch('', params)
 
         dispatch(self.request({label, xhr}))
 
