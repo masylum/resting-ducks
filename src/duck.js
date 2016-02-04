@@ -25,7 +25,7 @@ export default (client, options = {}) => namespace => {
 
   const indexes = options.indexes || []
 
-  return {
+  const self = {
     reducer (state = INITIAL_STATE, action = null) {
       const reducer = new Reducer(state, indexes)
 
@@ -84,16 +84,16 @@ export default (client, options = {}) => namespace => {
         const label = 'fetching'
         const { xhr, promise } = client.fetch('')
 
-        dispatch(this.request({label, xhr}))
+        dispatch(self.request({label, xhr}))
 
         return promise
           .then(data => {
-            dispatch(this.request(null))
-            dispatch(this.set(data))
+            dispatch(self.request(null))
+            dispatch(self.set(data))
           })
           .catch(error => {
-            dispatch(this.request(null))
-            dispatch(this.error({label, error}))
+            dispatch(self.request(null))
+            dispatch(self.error({label, error}))
           })
       }
     },
@@ -112,26 +112,26 @@ export default (client, options = {}) => namespace => {
         const { xhr, promise } = client.post('', attributes)
 
         if (optimistic) {
-          dispatch(this.add(attributes))
+          dispatch(self.add(attributes))
           cid = getState()[namespace].cid
 
-          dispatch(this.request({label, xhr}, cid))
+          dispatch(self.request({label, xhr}, cid))
         }
 
         return promise
           .then(data => {
             if (optimistic) {
-              dispatch(this.set(data, cid))
-              dispatch(this.request(null, cid))
+              dispatch(self.set(data, cid))
+              dispatch(self.request(null, cid))
             } else {
-              dispatch(this.add(data))
+              dispatch(self.add(data))
             }
           })
           .catch(error => {
             if (optimistic) {
-              dispatch(this.remove(cid))
+              dispatch(self.remove(cid))
             }
-            dispatch(this.error({label, error}))
+            dispatch(self.error({label, error}))
           })
       }
     },
@@ -158,19 +158,19 @@ export default (client, options = {}) => namespace => {
 
         if (optimistic) {
           const action = patch ? 'patch' : 'set'
-          dispatch(this[action](attributes, id))
+          dispatch(self[action](attributes, id))
         }
 
-        dispatch(this.request({label, xhr}, id))
+        dispatch(self.request({label, xhr}, id))
 
         return promise
           .then(data => {
-            dispatch(this.request(null, id))
-            dispatch(this.set(data, id))
+            dispatch(self.request(null, id))
+            dispatch(self.set(data, id))
           })
           .catch(error => {
-            dispatch(this.request(null, id))
-            dispatch(this.error({label, error}, id))
+            dispatch(self.request(null, id))
+            dispatch(self.error({label, error}, id))
           })
       }
     },
@@ -188,21 +188,23 @@ export default (client, options = {}) => namespace => {
         const { promise, xhr } = client.del(`/${id}`)
 
         if (optimistic) {
-          dispatch(this.remove(id))
+          dispatch(self.remove(id))
         } else {
-          dispatch(this.request({label, xhr}, id))
+          dispatch(self.request({label, xhr}, id))
         }
 
         return promise
           .then(() => {
             if (!optimistic) {
-              dispatch(this.remove(id))
+              dispatch(self.remove(id))
             }
           })
           .catch(error =>
-            dispatch(this.error({label, error}))
+            dispatch(self.error({label, error}))
           )
       }
     }
   }
+
+  return self
 }
