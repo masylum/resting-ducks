@@ -36,6 +36,6 @@ export default class API {
   }
 
   del (path, params = {}) {
-    return this.client.delRequest(path, params)
+    return this.client.deleteRequest(path, params)
   }
 }
