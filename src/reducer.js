@@ -54,7 +54,7 @@ class Reducer {
       }
     }
 
-    return Object.assign(state, {indexes})
+    return Object.assign({}, state, {indexes})
   }
 
   /**
@@ -129,7 +129,7 @@ class Reducer {
     if (id) {
       return this._recalculateIndexes(this._update({attributes}, id))
     } else {
-      return this._recalculateIndexes(Object.assign(this.state, {
+      return this._recalculateIndexes(Object.assign({}, this.state, {
         cid: this._boxCid(attributes.length),
         resources: this._serialize(0, [].concat(attributes))
       }))
@@ -146,10 +146,13 @@ class Reducer {
   patch (attributes, id) {
     const resource = this.state.resources[this._find(id)]
 
-    attributes = Object.assign(resource.attributes, attributes)
+    attributes = Object.assign({}, resource.attributes, attributes)
 
     return this._recalculateIndexes(
-      this._update(Object.assign(resource, {attributes}), attributes.id)
+      this._update(
+        Object.assign({}, resource, {attributes}),
+        resource.attributes.id
+      )
     )
   }
 
@@ -164,7 +167,7 @@ class Reducer {
     if (id) {
       return this._update({request}, id)
     } else {
-      return Object.assign(this.state, {request})
+      return Object.assign({}, this.state, {request})
     }
   }
 
@@ -179,7 +182,7 @@ class Reducer {
     if (id) {
       return this._update({error}, id)
     } else {
-      return Object.assign(this.state, {error})
+      return Object.assign({}, this.state, {error})
     }
   }
 
@@ -205,7 +208,7 @@ class Reducer {
   add (attributes) {
     const numCid = this._unboxCid(this.state.cid)
 
-    return this._recalculateIndexes(Object.assign(this.state, {
+    return this._recalculateIndexes(Object.assign({}, this.state, {
       cid: this._boxCid(numCid + 1),
       resources: [
         ...this.state.resources,

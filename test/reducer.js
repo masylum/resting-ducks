@@ -29,7 +29,7 @@ describe('Reducer', () => {
     context('when including a cid', () => {
       context('and the resource is not found', () => {
         it('throws an error', () => {
-          assert.throws(() => { reducer.set({a: 'c'}, 'c999') })
+          assert.throws(() => { reducer.set({a: 'c'}, 'c__999') })
         })
       })
 
@@ -104,7 +104,7 @@ describe('Reducer', () => {
     context('when including a cid', () => {
       context('and the resource is not found', () => {
         it('throws an error', () => {
-          assert.throws(() => { reducer.patch({b: 'c'}, 'c999') })
+          assert.throws(() => { reducer.patch({b: 'c'}, 'c__999') })
         })
       })
 
@@ -160,7 +160,7 @@ describe('Reducer', () => {
     context('when a cid is given', () => {
       context('and the resource is not found', () => {
         it('throws an error', () => {
-          assert.throws(() => { reducer.request({a: 'c'}, 'c999') })
+          assert.throws(() => { reducer.request({a: 'c'}, 'c__999') })
         })
       })
 
@@ -235,7 +235,7 @@ describe('Reducer', () => {
     context('when a cid is given', () => {
       context('and the resource is not found', () => {
         it('throws an error', () => {
-          assert.throws(() => { reducer.error({a: 'c'}, 'c999') })
+          assert.throws(() => { reducer.error({a: 'c'}, 'c__999') })
         })
       })
 
@@ -310,7 +310,7 @@ describe('Reducer', () => {
     context('when a cid is given', () => {
       context('and the resource is not found', () => {
         it('throws an error', () => {
-          assert.throws(() => { reducer.remove('c999') })
+          assert.throws(() => { reducer.remove('c__999') })
         })
       })
 
