@@ -131,7 +131,7 @@ class Reducer {
     } else {
       return this._recalculateIndexes(Object.assign(this.state, {
         cid: this._boxCid(attributes.length),
-        resources: this._serialize(0, attributes)
+        resources: this._serialize(0, [].concat(attributes))
       }))
     }
   }
