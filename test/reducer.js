@@ -8,14 +8,14 @@ describe('Reducer', () => {
 
   beforeEach(() => {
     const resource = {
-      cid: 'c1',
+      cid: 'c__1',
       attributes: {a: 'b', id: 10},
       request: null,
       error: null
     }
 
     state = {
-      cid: 'c1',
+      cid: 'c__1',
       resources: [resource],
       indexes: {id: {10: [resource]}},
       request: null,
@@ -36,18 +36,18 @@ describe('Reducer', () => {
       context('and the resource is found', () => {
         it('updates the resource', () => {
           const resource = {
-            cid: 'c1',
+            cid: 'c__1',
             attributes: {a: 'c', id: 11},
             request: null,
             error: null
           }
 
-          assert.deepEqual(reducer.set({a: 'c', id: 11}, 'c1'), {
+          assert.deepEqual(reducer.set({a: 'c', id: 11}, 'c__1'), {
             resources: [resource],
             indexes: {id: {11: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -63,7 +63,7 @@ describe('Reducer', () => {
       context('and the resource is found', () => {
         it('updates the resource', () => {
           const resource = {
-            cid: 'c1',
+            cid: 'c__1',
             attributes: {a: 'c', id: 11},
             request: null,
             error: null
@@ -74,7 +74,7 @@ describe('Reducer', () => {
             indexes: {id: {11: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -84,7 +84,7 @@ describe('Reducer', () => {
       it('sets the resources', () => {
         const resource = {
           attributes: {b: 'c', id: 10},
-          cid: 'c1',
+          cid: 'c__1',
           request: null,
           error: null
         }
@@ -94,7 +94,7 @@ describe('Reducer', () => {
           indexes: {id: {10: [resource]}},
           request: null,
           error: null,
-          cid: 'c1'
+          cid: 'c__1'
         })
       })
     })
@@ -111,18 +111,18 @@ describe('Reducer', () => {
       context('and the resource is found', () => {
         it('patches the resource', () => {
           const resource = {
-            cid: 'c1',
+            cid: 'c__1',
             attributes: {a: 'b', b: 'c', id: 11},
             request: null,
             error: null
           }
 
-          assert.deepEqual(reducer.patch({b: 'c', id: 11}, 'c1'), {
+          assert.deepEqual(reducer.patch({b: 'c', id: 11}, 'c__1'), {
             resources: [resource],
             indexes: {id: {11: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -138,7 +138,7 @@ describe('Reducer', () => {
       context('and the resource is found', () => {
         it('updates the resource', () => {
           const resource = {
-            cid: 'c1',
+            cid: 'c__1',
             attributes: {a: 'b', b: 'c', id: 11},
             request: null,
             error: null
@@ -149,7 +149,7 @@ describe('Reducer', () => {
             indexes: {id: {11: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -167,18 +167,18 @@ describe('Reducer', () => {
       context('and the resource is found', () => {
         it('updates the resource', () => {
           const resource = {
-            cid: 'c1',
+            cid: 'c__1',
             request: {},
             error: null,
             attributes: {a: 'b', id: 10}
           }
 
-          assert.deepEqual(reducer.request({}, 'c1'), {
+          assert.deepEqual(reducer.request({}, 'c__1'), {
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -194,7 +194,7 @@ describe('Reducer', () => {
       context('and the resource is found', () => {
         it('updates the resource', () => {
           const resource = {
-            cid: 'c1',
+            cid: 'c__1',
             request: {},
             error: null,
             attributes: {a: 'b', id: 10}
@@ -205,7 +205,7 @@ describe('Reducer', () => {
             indexes: {id: {10: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -215,7 +215,7 @@ describe('Reducer', () => {
       it('updates the reducer', () => {
         const resource = {
           attributes: {a: 'b', id: 10},
-          cid: 'c1',
+          cid: 'c__1',
           request: null,
           error: null
         }
@@ -225,7 +225,7 @@ describe('Reducer', () => {
           indexes: {id: {10: [resource]}},
           request: {a: 'b'},
           error: null,
-          cid: 'c1'
+          cid: 'c__1'
         })
       })
     })
@@ -242,18 +242,18 @@ describe('Reducer', () => {
       context('and the resource is found', () => {
         it('updates the resource', () => {
           const resource = {
-            cid: 'c1',
+            cid: 'c__1',
             request: null,
             error: {},
             attributes: {a: 'b', id: 10}
           }
 
-          assert.deepEqual(reducer.error({}, 'c1'), {
+          assert.deepEqual(reducer.error({}, 'c__1'), {
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -269,7 +269,7 @@ describe('Reducer', () => {
       context('and the resource is found', () => {
         it('updates the resource', () => {
           const resource = {
-            cid: 'c1',
+            cid: 'c__1',
             request: null,
             error: {},
             attributes: {a: 'b', id: 10}
@@ -280,7 +280,7 @@ describe('Reducer', () => {
             indexes: {id: {10: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -290,7 +290,7 @@ describe('Reducer', () => {
       it('updates the reducer', () => {
         const resource = {
           attributes: {a: 'b', id: 10},
-          cid: 'c1',
+          cid: 'c__1',
           request: null,
           error: null
         }
@@ -300,7 +300,7 @@ describe('Reducer', () => {
           indexes: {id: {10: [resource]}},
           request: null,
           error: {a: 'b'},
-          cid: 'c1'
+          cid: 'c__1'
         })
       })
     })
@@ -316,12 +316,12 @@ describe('Reducer', () => {
 
       context('and the resource is found', () => {
         it('updates the resource', () => {
-          assert.deepEqual(reducer.remove('c1'), {
+          assert.deepEqual(reducer.remove('c__1'), {
             resources: [],
             indexes: {id: {}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -341,7 +341,7 @@ describe('Reducer', () => {
             indexes: {id: {}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -352,14 +352,14 @@ describe('Reducer', () => {
     it('add the resource to the resources list', () => {
       const resourceA = {
         attributes: {a: 'b', id: 10},
-        cid: 'c1',
+        cid: 'c__1',
         error: null,
         request: null
       }
 
       const resourceB = {
         attributes: {b: 'c', id: 10},
-        cid: 'c2',
+        cid: 'c__2',
         error: null,
         request: null
       }
@@ -371,7 +371,7 @@ describe('Reducer', () => {
         },
         request: null,
         error: null,
-        cid: 'c2'
+        cid: 'c__2'
       })
     })
   })

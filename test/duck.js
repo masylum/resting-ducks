@@ -22,7 +22,7 @@ describe('Duck', () => {
 
   beforeEach(() => {
     const resources = [{
-      cid: 'c1',
+      cid: 'c__1',
       attributes: {a: 'b', id: 10},
       request: null,
       error: null
@@ -33,7 +33,7 @@ describe('Duck', () => {
       request: null,
       error: null,
       indexes: {id: {10: resources}},
-      cid: 'c1'
+      cid: 'c__1'
     }
 
     client = new MockApi()
@@ -61,7 +61,7 @@ describe('Duck', () => {
         it('updates the resource', () => {
           const attributes = {a: 'c', id: 11}
           const resource = {
-            cid: 'c1',
+            cid: 'c__1',
             attributes,
             request: null,
             error: null
@@ -73,7 +73,7 @@ describe('Duck', () => {
             indexes: {id: {11: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -84,7 +84,7 @@ describe('Duck', () => {
         const attributes = {b: 'c', id: 15}
         const resource = {
           attributes,
-          cid: 'c1',
+          cid: 'c__1',
           request: null,
           error: null
         }
@@ -93,7 +93,7 @@ describe('Duck', () => {
         assert.deepEqual(state, {
           resources: [resource],
           indexes: {id: {15: [resource]}},
-          cid: 'c1',
+          cid: 'c__1',
           request: null,
           error: null
         })
@@ -112,7 +112,7 @@ describe('Duck', () => {
       it('patches the resource', () => {
         const attributes = {b: 'c', id: 11}
         const resource = {
-          cid: 'c1',
+          cid: 'c__1',
           attributes: {a: 'b', b: 'c', id: 11},
           request: null,
           error: null
@@ -124,7 +124,7 @@ describe('Duck', () => {
           indexes: {id: {11: [resource]}},
           request: null,
           error: null,
-          cid: 'c1'
+          cid: 'c__1'
         })
       })
     })
@@ -142,7 +142,7 @@ describe('Duck', () => {
         it('updates the resource', () => {
           const request = {label: 'foo', xhr: 123}
           const resource = {
-            cid: 'c1',
+            cid: 'c__1',
             request,
             error: null,
             attributes: {a: 'b', id: 10}
@@ -154,7 +154,7 @@ describe('Duck', () => {
             indexes: {id: {10: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -165,7 +165,7 @@ describe('Duck', () => {
         const request = {label: 'fooing', xhr: 123}
         const resource = {
           attributes: {a: 'b', id: 10},
-          cid: 'c1',
+          cid: 'c__1',
           request: null,
           error: null
         }
@@ -176,7 +176,7 @@ describe('Duck', () => {
           indexes: {id: {10: [resource]}},
           request,
           error: null,
-          cid: 'c1'
+          cid: 'c__1'
         })
       })
     })
@@ -194,7 +194,7 @@ describe('Duck', () => {
         it('updates the resource', () => {
           const error = {label: 'foo', xhr: 123}
           const resource = {
-            cid: 'c1',
+            cid: 'c__1',
             request: null,
             error,
             attributes: {a: 'b', id: 10}
@@ -206,7 +206,7 @@ describe('Duck', () => {
             indexes: {id: {10: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -217,7 +217,7 @@ describe('Duck', () => {
         const error = {label: 'fooing', message: 'foo'}
         const resource = {
           attributes: {a: 'b', id: 10},
-          cid: 'c1',
+          cid: 'c__1',
           request: null,
           error: null
         }
@@ -228,7 +228,7 @@ describe('Duck', () => {
           indexes: {id: {10: [resource]}},
           error,
           request: null,
-          cid: 'c1'
+          cid: 'c__1'
         })
       })
     })
@@ -249,7 +249,7 @@ describe('Duck', () => {
           indexes: {id: {}},
           request: null,
           error: null,
-          cid: 'c1'
+          cid: 'c__1'
         })
       })
     })
@@ -259,14 +259,14 @@ describe('Duck', () => {
     it('add the resource to the resources list', () => {
       const resourceA = {
         attributes: {a: 'b', id: 10},
-        cid: 'c1',
+        cid: 'c__1',
         request: null,
         error: null
       }
       const attributes = {b: 'c', id: 11}
       const resourceB = {
         attributes,
-        cid: 'c2',
+        cid: 'c__2',
         request: null,
         error: null
       }
@@ -277,7 +277,7 @@ describe('Duck', () => {
         indexes: {id: {10: [resourceA], 11: [resourceB]}},
         request: null,
         error: null,
-        cid: 'c2'
+        cid: 'c__2'
       })
     })
   })
@@ -286,7 +286,7 @@ describe('Duck', () => {
     it('sets the current request', () => {
       const resource = {
         attributes: {a: 'b', id: 10},
-        cid: 'c1',
+        cid: 'c__1',
         request: null,
         error: null
       }
@@ -297,7 +297,7 @@ describe('Duck', () => {
         indexes: {id: {10: [resource]}},
         request: {label: 'fetching', xhr: 123},
         error: null,
-        cid: 'c1'
+        cid: 'c__1'
       })
     })
 
@@ -307,7 +307,7 @@ describe('Duck', () => {
       it('sets the data', () => {
         const resource = {
           attributes: {b: 'c', id: 11},
-          cid: 'c1',
+          cid: 'c__1',
           request: null,
           error: null
         }
@@ -317,7 +317,7 @@ describe('Duck', () => {
             resources: [resource],
             indexes: {id: {11: [resource]}},
             request: null,
-            cid: 'c1',
+            cid: 'c__1',
             error: null
           })
         })
@@ -330,7 +330,7 @@ describe('Duck', () => {
       it('marks the error', () => {
         const resource = {
           attributes: {a: 'b', id: 10},
-          cid: 'c1',
+          cid: 'c__1',
           request: null,
           error: null
         }
@@ -340,7 +340,7 @@ describe('Duck', () => {
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
-            cid: 'c1',
+            cid: 'c__1',
             error: {label: 'fetching', error}
           })
         })
@@ -353,14 +353,14 @@ describe('Duck', () => {
       it('creates the resource with the ongoing request', () => {
         const resourceA = {
           attributes: {a: 'b', id: 10},
-          cid: 'c1',
+          cid: 'c__1',
           request: null,
           error: null
         }
         const attributes = {b: 'c'}
         const resourceB = {
           attributes,
-          cid: 'c2',
+          cid: 'c__2',
           request: {label: 'creating', xhr: 234},
           error: null
         }
@@ -372,7 +372,7 @@ describe('Duck', () => {
           indexes: {id: {10: [resourceA]}},
           request: null,
           error: null,
-          cid: 'c2'
+          cid: 'c__2'
         })
       })
 
@@ -384,13 +384,13 @@ describe('Duck', () => {
         it('sets the data', () => {
           const resourceA = {
             attributes: {a: 'b', id: 10},
-            cid: 'c1',
+            cid: 'c__1',
             request: null,
             error: null
           }
           const resourceB = {
-            attributes: {c: 'd',id: 11},
-            cid: 'c2',
+            attributes: {c: 'd', id: 11},
+            cid: 'c__2',
             request: null,
             error: null
           }
@@ -401,7 +401,7 @@ describe('Duck', () => {
               indexes: {id: {10: [resourceA], 11: [resourceB]}},
               request: null,
               error: null,
-              cid: 'c2'
+              cid: 'c__2'
             })
           })
         })
@@ -413,7 +413,7 @@ describe('Duck', () => {
         it('marks the error', () => {
           const resourceA = {
             attributes: {a: 'b', id: 10},
-            cid: 'c1',
+            cid: 'c__1',
             request: null,
             error: null
           }
@@ -424,7 +424,7 @@ describe('Duck', () => {
               indexes: {id: {10: [resourceA]}},
               request: null,
               error: {label: 'creating', error},
-              cid: 'c2'
+              cid: 'c__2'
             })
           })
         })
@@ -435,7 +435,7 @@ describe('Duck', () => {
       it('sets the ongoing request', () => {
         const resourceA = {
           attributes: {a: 'b', id: 10},
-          cid: 'c1',
+          cid: 'c__1',
           request: null,
           error: null
         }
@@ -448,7 +448,7 @@ describe('Duck', () => {
           indexes: {id: {10: [resourceA]}},
           request: null,
           error: null,
-          cid: 'c1'
+          cid: 'c__1'
         })
       })
 
@@ -460,13 +460,13 @@ describe('Duck', () => {
         it('sets the data', () => {
           const resourceA = {
             attributes: {a: 'b', id: 10},
-            cid: 'c1',
+            cid: 'c__1',
             error: null,
             request: null
           }
           const resourceB = {
             attributes,
-            cid: 'c2',
+            cid: 'c__2',
             error: null,
             request: null
           }
@@ -477,7 +477,7 @@ describe('Duck', () => {
               indexes: {id: {10: [resourceA], 11: [resourceB]}},
               request: null,
               error: null,
-              cid: 'c2'
+              cid: 'c__2'
             })
           })
         })
@@ -489,7 +489,7 @@ describe('Duck', () => {
         it('sets the data', () => {
           const resourceA = {
             attributes: {a: 'b', id: 10},
-            cid: 'c1',
+            cid: 'c__1',
             error: null,
             request: null
           }
@@ -500,7 +500,7 @@ describe('Duck', () => {
               indexes: {id: {10: [resourceA]}},
               request: null,
               error: {label: 'creating', error},
-              cid: 'c1'
+              cid: 'c__1'
             })
           })
         })
@@ -515,7 +515,7 @@ describe('Duck', () => {
           const attributes = {b: 'c', id: 10}
           const resource = {
             attributes,
-            cid: 'c1',
+            cid: 'c__1',
             request: {label: 'updating', xhr: 345},
             error: null
           }
@@ -527,7 +527,7 @@ describe('Duck', () => {
             indexes: {id: {10: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -537,7 +537,7 @@ describe('Duck', () => {
           const attributes = {b: 'c', id: 10}
           const resource = {
             attributes: {a: 'b', b: 'c', id: 10},
-            cid: 'c1',
+            cid: 'c__1',
             request: {label: 'updating', xhr: 345},
             error: null
           }
@@ -549,7 +549,7 @@ describe('Duck', () => {
             indexes: {id: {10: [resource]}},
             request: null,
             error: null,
-            cid: 'c1'
+            cid: 'c__1'
           })
         })
       })
@@ -562,7 +562,7 @@ describe('Duck', () => {
         it('sets the data', () => {
           const resource = {
             attributes,
-            cid: 'c1',
+            cid: 'c__1',
             request: null,
             error: null
           }
@@ -573,7 +573,7 @@ describe('Duck', () => {
               indexes: {id: {10: [resource]}},
               request: null,
               error: null,
-              cid: 'c1'
+              cid: 'c__1'
             })
           })
         })
@@ -587,7 +587,7 @@ describe('Duck', () => {
         it('marks the error', () => {
           const resource = {
             attributes,
-            cid: 'c1',
+            cid: 'c__1',
             request: null,
             error: {label: 'updating', error}
           }
@@ -598,7 +598,7 @@ describe('Duck', () => {
               indexes: {id: {10: [resource]}},
               request: null,
               error: null,
-              cid: 'c1'
+              cid: 'c__1'
             })
           })
         })
@@ -610,7 +610,7 @@ describe('Duck', () => {
         const attributes = {b: 'c', id: 10}
         const resource = {
           attributes: {a: 'b', id: 10},
-          cid: 'c1',
+          cid: 'c__1',
           request: {label: 'updating', xhr: 345},
           error: null
         }
@@ -622,7 +622,7 @@ describe('Duck', () => {
           indexes: {id: {10: [resource]}},
           request: null,
           error: null,
-          cid: 'c1'
+          cid: 'c__1'
         })
       })
 
@@ -634,7 +634,7 @@ describe('Duck', () => {
         it('sets the data', () => {
           const resource = {
             attributes,
-            cid: 'c1',
+            cid: 'c__1',
             request: null,
             error: null
           }
@@ -645,7 +645,7 @@ describe('Duck', () => {
               indexes: {id: {10: [resource]}},
               request: null,
               error: null,
-              cid: 'c1'
+              cid: 'c__1'
             })
           })
         })
@@ -657,7 +657,7 @@ describe('Duck', () => {
         it('marks the error', () => {
           const resource = {
             attributes: {a: 'b', id: 10},
-            cid: 'c1',
+            cid: 'c__1',
             request: null,
             error: {label: 'updating', error}
           }
@@ -668,7 +668,7 @@ describe('Duck', () => {
               indexes: {id: {10: [resource]}},
               request: null,
               error: null,
-              cid: 'c1'
+              cid: 'c__1'
             })
           })
         })
@@ -686,7 +686,7 @@ describe('Duck', () => {
           indexes: {id: {}},
           request: null,
           error: null,
-          cid: 'c1'
+          cid: 'c__1'
         })
       })
 
@@ -700,7 +700,7 @@ describe('Duck', () => {
               indexes: {id: {}},
               request: null,
               error: null,
-              cid: 'c1'
+              cid: 'c__1'
             })
           })
         })
@@ -716,7 +716,7 @@ describe('Duck', () => {
               indexes: {id: {}},
               request: null,
               error: {label: 'destroying', error},
-              cid: 'c1'
+              cid: 'c__1'
             })
           })
         })
@@ -727,7 +727,7 @@ describe('Duck', () => {
       it('marks the resource with the ongoing request', () => {
         const resource = {
           attributes: {a: 'b', id: 10},
-          cid: 'c1',
+          cid: 'c__1',
           request: {label: 'destroying', xhr: 456},
           error: null
         }
@@ -739,7 +739,7 @@ describe('Duck', () => {
           indexes: {id: {10: [resource]}},
           request: null,
           error: null,
-          cid: 'c1'
+          cid: 'c__1'
         })
       })
 
@@ -753,7 +753,7 @@ describe('Duck', () => {
               indexes: {id: {}},
               request: null,
               error: null,
-              cid: 'c1'
+              cid: 'c__1'
             })
           })
         })
@@ -765,7 +765,7 @@ describe('Duck', () => {
         it('marks the error', () => {
           const resource = {
             attributes: {a: 'b', id: 10},
-            cid: 'c1',
+            cid: 'c__1',
             request: {label: 'destroying', xhr: 456},
             error: null
           }
@@ -776,7 +776,7 @@ describe('Duck', () => {
               indexes: {id: {10: [resource]}},
               request: null,
               error: {label: 'destroying', error},
-              cid: 'c1'
+              cid: 'c__1'
             })
           })
         })

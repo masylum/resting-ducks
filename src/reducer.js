@@ -1,5 +1,8 @@
 import _ from 'lodash'
 
+const cid_prefix = 'c__'
+const cid_regex = new RegExp(`${cid_prefix}(.*)`)
+
 class Reducer {
 
   /**
@@ -17,21 +20,21 @@ class Reducer {
    * Namespaces the cid
    */
   _boxCid (id) {
-    return `c${id}`
+    return `${cid_prefix}${id}`
   }
 
   /**
    * Namespaces the cid
    */
   _unboxCid (cid) {
-    return parseInt(cid.slice(1), 10)
+    return parseInt(cid.match(cid_regex)[1], 10)
   }
 
   /**
    * Wether the given id is a cid
    */
   _isCid (id) {
-    return typeof id === 'string'
+    return cid_regex.test(id)
   }
 
   _recalculateIndexes (state) {
@@ -128,7 +131,7 @@ class Reducer {
     } else {
       return this._recalculateIndexes(Object.assign(this.state, {
         cid: this._boxCid(attributes.length),
-        resources: this._serialize(0, attributes),
+        resources: this._serialize(0, attributes)
       }))
     }
   }
@@ -191,7 +194,7 @@ class Reducer {
     const index = this._find(id)
 
     if (index === -1) {
-      throw Error(`Error removing resource: The resource with the cid "${cid}" was not found`)
+      throw Error(`Error removing resource: The resource with the cid "${id}" was not found`)
     }
 
     new_state.resources.splice(index, 1)
