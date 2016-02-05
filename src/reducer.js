@@ -1,4 +1,4 @@
-import { Map, List } from 'immutable'
+import { Map, List, fromJS } from 'immutable'
 
 const cid_prefix = 'c__'
 const cid_regex = new RegExp(`${cid_prefix}(.*)`)
@@ -68,8 +68,8 @@ class Reducer {
    */
   _serialize (cid, attributes) {
     return attributes.map((a, i) => {
-      return Map({
-        attributes: Map(a),
+      return fromJS({
+        attributes: a,
         cid: this._boxCid(cid + i + 1),
         request: null,
         error: null
@@ -112,7 +112,7 @@ class Reducer {
     const resources = this.state.get('resources')
       .mergeIn([index], resource)
 
-    return this.state.set('resources', resources)
+    return this.state.merge({resources: resources})
   }
 
   /**
@@ -128,7 +128,7 @@ class Reducer {
     } else {
       return this._recalculateIndexes(this.state.merge({
         cid: this._boxCid(attributes.length),
-        resources: this._serialize(0, List([].concat(attributes)))
+        resources: this._serialize(0, fromJS(attributes))
       }))
     }
   }
@@ -168,7 +168,7 @@ class Reducer {
     if (id) {
       return this._recalculateIndexes(this._update({request}, id))
     } else {
-      return this.state.merge({request})
+      return this.state.merge({request: request})
     }
   }
 
@@ -183,7 +183,7 @@ class Reducer {
     if (id) {
       return this._recalculateIndexes(this._update({error}, id))
     } else {
-      return this.state.merge({error})
+      return this.state.merge({error: error})
     }
   }
 
@@ -205,9 +205,9 @@ class Reducer {
 
   add (attributes) {
     const numCid = this._unboxCid(this.state.get('cid'))
-    const resource = this._serialize(numCid, List([attributes]))
+    const resource = this._serialize(numCid, fromJS([attributes]))
     const resources = this.state.get('resources').concat(resource)
-    const state = this.state.mergeDeep({
+    const state = this.state.merge({
       cid: this._boxCid(numCid + 1),
       resources
     })
