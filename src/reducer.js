@@ -59,7 +59,7 @@ class Reducer {
   }
 
   initialState () {
-    return fromJS(this._recalculateIndexes({
+    return this._recalculateIndexes(fromJS({
       resources: [],
       cid: 'c0',
       request: null,

@@ -20,7 +20,7 @@ export default (client, options = {}) => namespace => {
   const indexes = options.indexes || []
 
   const self = {
-    reducer (state, action = null) {
+    reducer (state = {}, action = null) {
       const reducer = new Reducer(state, indexes)
 
       switch (action.type) {
