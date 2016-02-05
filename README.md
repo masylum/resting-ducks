@@ -28,6 +28,10 @@ store.dispatch(
 })
 ```
 
+## Immutable
+
+The state is stored using [immutable.js](https://facebook.github.io/immutable-js)
+
 ## API
 
 ### `Duck`

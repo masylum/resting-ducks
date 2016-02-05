@@ -2,6 +2,7 @@
 import assert from 'assert'
 import { Duck } from '../src/'
 import MockApi from './mocks/api'
+import { fromJS } from 'immutable'
 
 const error = 'boom!'
 
@@ -10,13 +11,17 @@ describe('Duck', () => {
   let state
   let client
 
-  const resolve = (attr) => {
+  function assertTree(tree) {
+    assert.deepEqual(state.toJS(), tree)
+  }
+
+  function resolve (attr) {
     return () => {
       client.resolver = (resolve) => resolve(attr)
     }
   }
 
-  const reject = () => {
+  function reject () {
     client.resolver = (_resolve, reject) => reject(error)
   }
 
@@ -28,13 +33,13 @@ describe('Duck', () => {
       error: null
     }]
 
-    state = {
+    state = fromJS({
       resources,
       request: null,
       error: null,
       indexes: {id: {10: resources}},
       cid: 'c__1'
-    }
+    })
 
     client = new MockApi()
     duck = Duck(client, {})('active_tasks')
@@ -68,7 +73,7 @@ describe('Duck', () => {
           }
 
           dispatch(duck.set(attributes, 10))
-          assert.deepEqual(state, {
+          assertTree({
             resources: [resource],
             indexes: {id: {11: [resource]}},
             request: null,
@@ -90,7 +95,7 @@ describe('Duck', () => {
         }
 
         dispatch(duck.set([attributes]))
-        assert.deepEqual(state, {
+        assertTree({
           resources: [resource],
           indexes: {id: {15: [resource]}},
           cid: 'c__1',
@@ -119,7 +124,7 @@ describe('Duck', () => {
         }
 
         dispatch(duck.patch(attributes, 10))
-        assert.deepEqual(state, {
+        assertTree({
           resources: [resource],
           indexes: {id: {11: [resource]}},
           request: null,
@@ -149,7 +154,7 @@ describe('Duck', () => {
           }
 
           dispatch(duck.request(request, 10))
-          assert.deepEqual(state, {
+          assertTree({
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
@@ -171,7 +176,7 @@ describe('Duck', () => {
         }
 
         dispatch(duck.request(request))
-        assert.deepEqual(state, {
+        assertTree({
           resources: [resource],
           indexes: {id: {10: [resource]}},
           request,
@@ -201,7 +206,7 @@ describe('Duck', () => {
           }
 
           dispatch(duck.error(error, 10))
-          assert.deepEqual(state, {
+          assertTree({
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
@@ -223,7 +228,7 @@ describe('Duck', () => {
         }
 
         dispatch(duck.error(error))
-        assert.deepEqual(state, {
+        assertTree({
           resources: [resource],
           indexes: {id: {10: [resource]}},
           error,
@@ -244,7 +249,7 @@ describe('Duck', () => {
     context('when the resource is found', () => {
       it('updates the resource', () => {
         dispatch(duck.remove(10))
-        assert.deepEqual(state, {
+        assertTree({
           resources: [],
           indexes: {id: {}},
           request: null,
@@ -272,7 +277,7 @@ describe('Duck', () => {
       }
 
       dispatch(duck.add(attributes))
-      assert.deepEqual(state, {
+      assertTree({
         resources: [resourceA, resourceB],
         indexes: {id: {10: [resourceA], 11: [resourceB]}},
         request: null,
@@ -292,7 +297,7 @@ describe('Duck', () => {
       }
 
       dispatch(duck.fetch())
-      assert.deepEqual(state, {
+      assertTree({
         resources: [resource],
         indexes: {id: {10: [resource]}},
         request: {label: 'fetching', xhr: 123},
@@ -313,7 +318,7 @@ describe('Duck', () => {
         }
 
         return dispatch(duck.fetch()).then(() => {
-          assert.deepEqual(state, {
+          assertTree({
             resources: [resource],
             indexes: {id: {11: [resource]}},
             request: null,
@@ -336,7 +341,7 @@ describe('Duck', () => {
         }
 
         return dispatch(duck.fetch()).then(() => {
-          assert.deepEqual(state, {
+          assertTree({
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
@@ -367,7 +372,7 @@ describe('Duck', () => {
 
         dispatch(duck.create(attributes))
 
-        assert.deepEqual(state, {
+        assertTree({
           resources: [resourceA, resourceB],
           indexes: {id: {10: [resourceA]}},
           request: null,
@@ -396,7 +401,7 @@ describe('Duck', () => {
           }
 
           return dispatch(duck.create({b: 'c'})).then(() => {
-            assert.deepEqual(state, {
+            assertTree({
               resources: [resourceA, resourceB],
               indexes: {id: {10: [resourceA], 11: [resourceB]}},
               request: null,
@@ -419,7 +424,7 @@ describe('Duck', () => {
           }
 
           return dispatch(duck.create({b: 'c'})).then(() => {
-            assert.deepEqual(state, {
+            assertTree({
               resources: [resourceA],
               indexes: {id: {10: [resourceA]}},
               request: null,
@@ -443,7 +448,7 @@ describe('Duck', () => {
 
         dispatch(duck.create(attributes, {optimistic: false}))
 
-        assert.deepEqual(state, {
+        assertTree({
           resources: [resourceA],
           indexes: {id: {10: [resourceA]}},
           request: null,
@@ -472,7 +477,7 @@ describe('Duck', () => {
           }
 
           return dispatch(duck.create({b: 'c'}, {optimistic: false})).then(() => {
-            assert.deepEqual(state, {
+            assertTree({
               resources: [resourceA, resourceB],
               indexes: {id: {10: [resourceA], 11: [resourceB]}},
               request: null,
@@ -495,7 +500,7 @@ describe('Duck', () => {
           }
 
           return dispatch(duck.create({b: 'c'}, {optimistic: false})).then(() => {
-            assert.deepEqual(state, {
+            assertTree({
               resources: [resourceA],
               indexes: {id: {10: [resourceA]}},
               request: null,
@@ -522,7 +527,7 @@ describe('Duck', () => {
 
           dispatch(duck.update(attributes, 10))
 
-          assert.deepEqual(state, {
+          assertTree({
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
@@ -544,7 +549,7 @@ describe('Duck', () => {
 
           dispatch(duck.update(attributes, 10, {patch: true}))
 
-          assert.deepEqual(state, {
+          assertTree({
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
@@ -568,7 +573,7 @@ describe('Duck', () => {
           }
 
           return dispatch(duck.update({b: 'c', id: 10}, 10)).then(() => {
-            assert.deepEqual(state, {
+            assertTree({
               resources: [resource],
               indexes: {id: {10: [resource]}},
               request: null,
@@ -593,7 +598,7 @@ describe('Duck', () => {
           }
 
           return dispatch(duck.update(attributes, 10)).then(() => {
-            assert.deepEqual(state, {
+            assertTree({
               resources: [resource],
               indexes: {id: {10: [resource]}},
               request: null,
@@ -617,7 +622,7 @@ describe('Duck', () => {
 
         dispatch(duck.update(attributes, 10, {optimistic: false}))
 
-        assert.deepEqual(state, {
+        assertTree({
           resources: [resource],
           indexes: {id: {10: [resource]}},
           request: null,
@@ -640,7 +645,7 @@ describe('Duck', () => {
           }
 
           return dispatch(duck.update({b: 'c', id: 10}, 10, {optimistic: false})).then(() => {
-            assert.deepEqual(state, {
+            assertTree({
               resources: [resource],
               indexes: {id: {10: [resource]}},
               request: null,
@@ -663,7 +668,7 @@ describe('Duck', () => {
           }
 
           return dispatch(duck.update({b: 'c', id: 10}, 10, {optimistic: false})).then(() => {
-            assert.deepEqual(state, {
+            assertTree({
               resources: [resource],
               indexes: {id: {10: [resource]}},
               request: null,
@@ -681,7 +686,7 @@ describe('Duck', () => {
       it('optimistically removes the resource with the ongoing request', () => {
         dispatch(duck.destroy(10))
 
-        assert.deepEqual(state, {
+        assertTree({
           resources: [],
           indexes: {id: {}},
           request: null,
@@ -695,7 +700,7 @@ describe('Duck', () => {
 
         it('keeps being removed', () => {
           return dispatch(duck.destroy(10)).then(() => {
-            assert.deepEqual(state, {
+            assertTree({
               resources: [],
               indexes: {id: {}},
               request: null,
@@ -711,7 +716,7 @@ describe('Duck', () => {
 
         it('marks the error', () => {
           return dispatch(duck.destroy(10)).then(() => {
-            assert.deepEqual(state, {
+            assertTree({
               resources: [],
               indexes: {id: {}},
               request: null,
@@ -734,7 +739,7 @@ describe('Duck', () => {
 
         dispatch(duck.destroy(10, {optimistic: false}))
 
-        assert.deepEqual(state, {
+        assertTree({
           resources: [resource],
           indexes: {id: {10: [resource]}},
           request: null,
@@ -748,7 +753,7 @@ describe('Duck', () => {
 
         it('removes the resource', () => {
           return dispatch(duck.destroy(10, {optimistic: false})).then(() => {
-            assert.deepEqual(state, {
+            assertTree({
               resources: [],
               indexes: {id: {}},
               request: null,
@@ -771,7 +776,7 @@ describe('Duck', () => {
           }
 
           return dispatch(duck.destroy(10, {optimistic: false})).then(() => {
-            assert.deepEqual(state, {
+            assertTree({
               resources: [resource],
               indexes: {id: {10: [resource]}},
               request: null,

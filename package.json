@@ -1,6 +1,6 @@
 {
   "name": "resting-ducks",
-  "version": "0.0.10",
+  "version": "0.1.0",
   "description": "REST conventions for single tree stores.",
   "repository": {
     "type": "git",
@@ -10,6 +10,7 @@
   "dependencies": {
     "babel-plugin-transform-object-assign": "^6.3.13",
     "fetch-please": "^0.1.0",
+    "immutable": "^3.7.6",
     "lodash": "3.10.1"
   },
   "devDependencies": {

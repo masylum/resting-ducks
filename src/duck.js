@@ -1,4 +1,5 @@
 import Reducer from './reducer'
+import { Map, List } from 'immutable'
 
 /**
  * Configure and return a duck object
@@ -16,12 +17,12 @@ export default (client, options = {}) => namespace => {
   const ADD = `${namespace}/ADD`
   const REMOVE = `${namespace}/REMOVE`
 
-  const INITIAL_STATE = {
-    resources: [],
+  const INITIAL_STATE = Map({
+    resources: List(),
     cid: 'c0',
     request: null,
     error: null
-  }
+  })
 
   const indexes = options.indexes || []
 
@@ -113,7 +114,7 @@ export default (client, options = {}) => namespace => {
 
         if (optimistic) {
           dispatch(self.add(attributes))
-          cid = getState()[namespace].cid
+          cid = getState()[namespace].get('cid')
 
           dispatch(self.request({label, xhr}, cid))
         }

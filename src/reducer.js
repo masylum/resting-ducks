@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { Map, List } from 'immutable'
 
 const cid_prefix = 'c__'
 const cid_regex = new RegExp(`${cid_prefix}(.*)`)
@@ -38,23 +38,24 @@ class Reducer {
   }
 
   _recalculateIndexes (state) {
-    const indexes = {}
+    let indexes = Map()
 
     for (const index of this.indexes) {
-      indexes[index] = {}
+      indexes = indexes.set(index, Map())
     }
 
-    for (const resource of state.resources) {
+    state.get('resources').forEach((resource) => {
       for (const index of this.indexes) {
-        const attr = resource.attributes[index]
+        const attr = resource.getIn(['attributes', index])
 
         if (!attr) break
-        indexes[index][attr] = indexes[index][attr] || []
-        indexes[index][attr].push(resource)
+        const path = [index, attr]
+        const resources = indexes.getIn(path) || List()
+        indexes = indexes.setIn(path, resources.push(resource))
       }
-    }
+    })
 
-    return Object.assign({}, state, {indexes})
+    return state.merge({indexes})
   }
 
   /**
@@ -67,12 +68,12 @@ class Reducer {
    */
   _serialize (cid, attributes) {
     return attributes.map((a, i) => {
-      return {
-        attributes: a,
+      return Map({
+        attributes: Map(a),
         cid: this._boxCid(cid + i + 1),
         request: null,
         error: null
-      }
+      })
     })
   }
 
@@ -86,36 +87,32 @@ class Reducer {
     let search
 
     if (this._isCid(id)) {
-      search = (r) => r.cid === id
+      search = (r) => r.get('cid') === id
     } else {
-      search = (r) => r.attributes.id === id
+      search = (r) => r.getIn(['attributes', 'id']) === id
     }
 
-    return _.findIndex(this.state.resources, search)
+    return this.state.get('resources').findIndex(search)
   }
 
   /**
    * Updates the resource on the given id
    *
-   * @param {Object} attributes
+   * @param {Object} resource
    * @param {String|Integer} id
    * @return {Object}
    */
-  _update (attributes, id) {
-    const new_state = _.clone(this.state)
+  _update (resource, id) {
     const index = this._find(id)
 
     if (index === -1) {
       throw Error(`Error updating resource: The resource with the id "${id}" was not found`)
     }
 
-    new_state.resources.splice(
-      index,
-      1,
-      Object.assign(new_state.resources[index], attributes)
-    )
+    const resources = this.state.get('resources')
+      .mergeIn([index], resource)
 
-    return new_state
+    return this.state.set('resources', resources)
   }
 
   /**
@@ -129,9 +126,9 @@ class Reducer {
     if (id) {
       return this._recalculateIndexes(this._update({attributes}, id))
     } else {
-      return this._recalculateIndexes(Object.assign({}, this.state, {
+      return this._recalculateIndexes(this.state.merge({
         cid: this._boxCid(attributes.length),
-        resources: this._serialize(0, [].concat(attributes))
+        resources: this._serialize(0, List([].concat(attributes)))
       }))
     }
   }
@@ -144,14 +141,18 @@ class Reducer {
    * @return {Object}
    */
   patch (attributes, id) {
-    const resource = this.state.resources[this._find(id)]
+    const index = this._find(id)
 
-    attributes = Object.assign({}, resource.attributes, attributes)
+    if (index === -1) {
+      throw Error(`Error updating resource: The resource with the id "${id}" was not found`)
+    }
+
+    const resource = this.state.getIn(['resources', index])
 
     return this._recalculateIndexes(
       this._update(
-        Object.assign({}, resource, {attributes}),
-        resource.attributes.id
+        resource.mergeIn(['attributes'], attributes),
+        resource.getIn(['attributes', 'id'])
       )
     )
   }
@@ -165,9 +166,9 @@ class Reducer {
    */
   request (request, id = null) {
     if (id) {
-      return this._update({request}, id)
+      return this._recalculateIndexes(this._update({request}, id))
     } else {
-      return Object.assign({}, this.state, {request})
+      return this.state.merge({request})
     }
   }
 
@@ -180,9 +181,9 @@ class Reducer {
    */
   error (error, id = null) {
     if (id) {
-      return this._update({error}, id)
+      return this._recalculateIndexes(this._update({error}, id))
     } else {
-      return Object.assign({}, this.state, {error})
+      return this.state.merge({error})
     }
   }
 
@@ -193,28 +194,25 @@ class Reducer {
    * @return {Object}
    */
   remove (id) {
-    const new_state = _.clone(this.state)
     const index = this._find(id)
 
     if (index === -1) {
       throw Error(`Error removing resource: The resource with the cid "${id}" was not found`)
     }
 
-    new_state.resources.splice(index, 1)
-
-    return this._recalculateIndexes(new_state)
+    return this._recalculateIndexes(this.state.deleteIn(['resources', index]))
   }
 
   add (attributes) {
-    const numCid = this._unboxCid(this.state.cid)
-
-    return this._recalculateIndexes(Object.assign({}, this.state, {
+    const numCid = this._unboxCid(this.state.get('cid'))
+    const resource = this._serialize(numCid, List([attributes]))
+    const resources = this.state.get('resources').concat(resource)
+    const state = this.state.mergeDeep({
       cid: this._boxCid(numCid + 1),
-      resources: [
-        ...this.state.resources,
-        ...this._serialize(numCid, [attributes])
-      ]
-    }))
+      resources
+    })
+
+    return this._recalculateIndexes(state)
   }
 }
 

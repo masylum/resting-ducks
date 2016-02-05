@@ -1,10 +1,15 @@
 /* globals describe, beforeEach, it, context */
 import assert from 'assert'
 import Reducer from '../src/reducer'
+import { Map, List, fromJS } from 'immutable'
 
 describe('Reducer', () => {
   let reducer
   let state
+
+  function assertTree (mutation, tree) {
+    assert.deepEqual(mutation.toJS(), tree)
+  }
 
   beforeEach(() => {
     const resource = {
@@ -13,14 +18,15 @@ describe('Reducer', () => {
       request: null,
       error: null
     }
+    const resources = [resource]
 
-    state = {
+    state = fromJS({
       cid: 'c__1',
-      resources: [resource],
-      indexes: {id: {10: [resource]}},
+      resources,
+      indexes: {id: {10: resources}},
       request: null,
       error: null
-    }
+    })
 
     reducer = new Reducer(state)
   })
@@ -42,7 +48,7 @@ describe('Reducer', () => {
             error: null
           }
 
-          assert.deepEqual(reducer.set({a: 'c', id: 11}, 'c__1'), {
+          assertTree(reducer.set({a: 'c', id: 11}, 'c__1'), {
             resources: [resource],
             indexes: {id: {11: [resource]}},
             request: null,
@@ -69,7 +75,7 @@ describe('Reducer', () => {
             error: null
           }
 
-          assert.deepEqual(reducer.set({a: 'c', id: 11}, 10), {
+          assertTree(reducer.set({a: 'c', id: 11}, 10), {
             resources: [resource],
             indexes: {id: {11: [resource]}},
             request: null,
@@ -89,7 +95,7 @@ describe('Reducer', () => {
           error: null
         }
 
-        assert.deepEqual(reducer.set([{b: 'c', id: 10}]), {
+        assertTree(reducer.set([{b: 'c', id: 10}]), {
           resources: [resource],
           indexes: {id: {10: [resource]}},
           request: null,
@@ -117,7 +123,7 @@ describe('Reducer', () => {
             error: null
           }
 
-          assert.deepEqual(reducer.patch({b: 'c', id: 11}, 'c__1'), {
+          assertTree(reducer.patch({b: 'c', id: 11}, 'c__1'), {
             resources: [resource],
             indexes: {id: {11: [resource]}},
             request: null,
@@ -144,7 +150,7 @@ describe('Reducer', () => {
             error: null
           }
 
-          assert.deepEqual(reducer.patch({b: 'c', id: 11}, 10), {
+          assertTree(reducer.patch({b: 'c', id: 11}, 10), {
             resources: [resource],
             indexes: {id: {11: [resource]}},
             request: null,
@@ -173,7 +179,7 @@ describe('Reducer', () => {
             attributes: {a: 'b', id: 10}
           }
 
-          assert.deepEqual(reducer.request({}, 'c__1'), {
+          assertTree(reducer.request({}, 'c__1'), {
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
@@ -200,7 +206,7 @@ describe('Reducer', () => {
             attributes: {a: 'b', id: 10}
           }
 
-          assert.deepEqual(reducer.request({}, 10), {
+          assertTree(reducer.request({}, 10), {
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
@@ -220,7 +226,7 @@ describe('Reducer', () => {
           error: null
         }
 
-        assert.deepEqual(reducer.request({a: 'b'}), {
+        assertTree(reducer.request({a: 'b'}), {
           resources: [resource],
           indexes: {id: {10: [resource]}},
           request: {a: 'b'},
@@ -248,7 +254,7 @@ describe('Reducer', () => {
             attributes: {a: 'b', id: 10}
           }
 
-          assert.deepEqual(reducer.error({}, 'c__1'), {
+          assertTree(reducer.error({}, 'c__1'), {
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
@@ -275,7 +281,7 @@ describe('Reducer', () => {
             attributes: {a: 'b', id: 10}
           }
 
-          assert.deepEqual(reducer.error({}, 10), {
+          assertTree(reducer.error({}, 10), {
             resources: [resource],
             indexes: {id: {10: [resource]}},
             request: null,
@@ -295,7 +301,7 @@ describe('Reducer', () => {
           error: null
         }
 
-        assert.deepEqual(reducer.error({a: 'b'}), {
+        assertTree(reducer.error({a: 'b'}), {
           resources: [resource],
           indexes: {id: {10: [resource]}},
           request: null,
@@ -316,7 +322,7 @@ describe('Reducer', () => {
 
       context('and the resource is found', () => {
         it('updates the resource', () => {
-          assert.deepEqual(reducer.remove('c__1'), {
+          assertTree(reducer.remove('c__1'), {
             resources: [],
             indexes: {id: {}},
             request: null,
@@ -336,7 +342,7 @@ describe('Reducer', () => {
 
       context('and the resource is found', () => {
         it('updates the resource', () => {
-          assert.deepEqual(reducer.remove(10), {
+          assertTree(reducer.remove(10), {
             resources: [],
             indexes: {id: {}},
             request: null,
@@ -364,7 +370,7 @@ describe('Reducer', () => {
         request: null
       }
 
-      assert.deepEqual(reducer.add({b: 'c', id: 10}), {
+      assertTree(reducer.add({b: 'c', id: 10}), {
         resources: [resourceA, resourceB],
         indexes: {
           id: {10: [resourceA, resourceB]}
