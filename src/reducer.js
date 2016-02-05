@@ -58,6 +58,15 @@ class Reducer {
     return state.merge({indexes})
   }
 
+  initialState () {
+    return fromJS(this._recalculateIndexes({
+      resources: [],
+      cid: 'c0',
+      request: null,
+      error: null
+    }))
+  }
+
   /**
    * Maps an array of attributes to the
    * resource tree shape

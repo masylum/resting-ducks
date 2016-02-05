@@ -17,17 +17,10 @@ export default (client, options = {}) => namespace => {
   const ADD = `${namespace}/ADD`
   const REMOVE = `${namespace}/REMOVE`
 
-  const INITIAL_STATE = Map({
-    resources: List(),
-    cid: 'c0',
-    request: null,
-    error: null
-  })
-
   const indexes = options.indexes || []
 
   const self = {
-    reducer (state = INITIAL_STATE, action = null) {
+    reducer (state, action = null) {
       const reducer = new Reducer(state, indexes)
 
       switch (action.type) {
@@ -46,7 +39,7 @@ export default (client, options = {}) => namespace => {
         case REMOVE:
           return reducer.remove(action.id)
         default:
-          return state
+          return reducer.initialState()
       }
     },
 
