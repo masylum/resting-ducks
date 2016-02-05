@@ -20,8 +20,12 @@ export default (client, options = {}) => namespace => {
   const indexes = options.indexes || []
 
   const self = {
-    reducer (state = {}, action = null) {
+    reducer (state = null, action = null) {
       const reducer = new Reducer(state, indexes)
+
+      if (!state) {
+        return reducer.initialState()
+      }
 
       switch (action.type) {
         case RESET:
@@ -39,7 +43,7 @@ export default (client, options = {}) => namespace => {
         case REMOVE:
           return reducer.remove(action.id)
         default:
-          return reducer.initialState()
+          return state
       }
     },
 

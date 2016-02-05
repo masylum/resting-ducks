@@ -1,6 +1,6 @@
 {
   "name": "resting-ducks",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "REST conventions for single tree stores.",
   "repository": {
     "type": "git",
