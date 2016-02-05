@@ -128,7 +128,7 @@ class Reducer {
     } else {
       return this._recalculateIndexes(this.state.merge({
         cid: this._boxCid(attributes.length),
-        resources: this._serialize(0, fromJS(attributes))
+        resources: this._serialize(0, fromJS([].concat(attributes)))
       }))
     }
   }
